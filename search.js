@@ -8,6 +8,7 @@ let esSearchArray = [];
 let itSearchArray = [];
 
 let searchArray = [];
+let resultArray = [];
 
 
 /* 
@@ -114,8 +115,8 @@ async function startSearch() {
     if (!document.getElementById('search').checkValidity()) {
         alert(document.getElementById('search').validationMessage);
     } else {
+        curCardSet = [];
         let searchValue = document.getElementById('search').value;
-        let resultArray = [];
         for (let i = 0; i < searchArray.length; i++) {
             let element = searchArray[i];
             let splitted = element.split('~~~'); // [0] enthält den Namen, [1] die URL zur Karte
@@ -129,14 +130,17 @@ async function startSearch() {
             let url = resultArray[j][1];
             await loadPokemonByUrl(url);
         }
+
+        document.getElementById('closeSearch').style.display = 'block';
     }
 }
 
 
 /*
  *  Resettet eine Suchanfrage
- *  z.Z. wird lediglich die Suchzeile geleert
  */
 function resetSearch() {
     document.getElementById('search').value = '';
+    document.getElementById('closeSearch').style.display = 'none';
+    resultArray = [];
 }

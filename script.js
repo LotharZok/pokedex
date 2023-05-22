@@ -265,6 +265,7 @@ function closeCard() {
  */
 function goToCard(whereTo, event) {
     event.stopPropagation();
+
     let pos = curCardSet.indexOf(curCard);
     if (whereTo == 'previous') {
         (pos == 0) ? curCard = curCardSet[curCardSet.length - 1] : curCard = curCardSet[pos - 1];
