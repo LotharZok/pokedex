@@ -1,0 +1,408 @@
+/*
+ *  Globale Variablen
+ */
+let startNumber = 0;    // Aktuelle Startnummer des angezeigten Sets
+let maxNumber = 0;      // maximale Anzahl der Pokemons, wird beim ersten Start gesetzt
+let curLanguage = 'de'; // Aktuelle Sprache (von: current Language)
+let curCard = 0;        // Aktuelle Karte, die vergrößert angezeigt wird. Wird benötigt beim Blättern.
+let curCardSet = [];    // Enthält die Karten des aktuell angezeigten Sets. Da gegen Ende die Karten nicht unbedingt eine lfd. ID-Nummer haben, brauche ich das beim Blättern.
+let statsChart = null;  // Der Chart für die Statistics
+
+
+async function loadListOfPokemons(start) {
+    let url = `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=40`; // offset = start (von 0 ausgehend), limit = anzahl
+    let response = await fetch(url);
+    let respJson = await response.json();
+    curCardSet = [];
+
+    document.getElementById('pokedex').innerHTML = '';
+    maxNumber = +respJson['count'];  // Setzen der globalen Variablen mit der maximalen Anzahl der Pokemons, die angezeigt werden können
+
+    for (let i = 0; i < respJson.results.length; i++) {
+        const element = respJson.results[i];
+        await loadPokemonByUrl(element.url);
+    }
+    showHideNextPrevious();
+}
+
+async function loadPokemonByUrl(url) {
+    let response = await fetch(url);
+    let respJson = await response.json();
+
+    console.log(respJson);
+    // Variablen setzen, die ich noch brauche
+    curCardSet.push(respJson.id);
+    let color = `color${respJson['types'][0]['type']['name']}`;
+    let imgLink = getImgLink(respJson);
+    let languageName = await getLanguageName(respJson['species']['url']);
+
+    renderSmallCard(languageName, respJson.id, color, imgLink);
+
+    // types auswerten und ergänzen
+    let typeArray = respJson['types'];
+    for (let i = 0; i < typeArray.length; i++) {
+        const element = typeArray[i];
+        let typeUrl = element['type']['url'];
+        color = `color${element['type']['name']}`;
+        writeTypeData(typeUrl, `types-${respJson.id}`, `${color}dark`);
+    }
+}
+
+
+/*
+ *  Gibt den Link zum Image des gewählten Bildes zurück
+ *  Problem ist die Stelle [home][front_shiny]
+ *  --> [home] existiert evtl. nicht
+ *  --> [home][front_shiny] enthält null
+ *  --> In beiden Fällen soll [official-artwork][front_shiny] zurückgegeben werden
+ * 
+ *  @Param {JSON} srcJson - Das JSON-Objekt, daß u.a. die Pfadangaben enthält
+ */
+function getImgLink(srcJson) {
+    let tmpLink = srcJson['sprites']['other'];
+    if (tmpLink['home']) {
+        if (srcJson['sprites']['other']['home']['front_shiny'] != null) {
+            imgLink = srcJson['sprites']['other']['home']['front_shiny'];
+        } else {
+            imgLink = srcJson['sprites']['other']['official-artwork']['front_shiny'];
+        }
+    } else {
+        imgLink = srcJson['sprites']['other']['official-artwork']['front_shiny'];
+    }
+    return imgLink;
+}
+
+
+/*
+ *  Rendert die kleinen Übersichtskarten
+ *
+ *  @Param {string} name - Name der Figur
+ *  @Param {string} id - Die ID der Figur
+ *  @Param {string} color - Die Angaben für den Farbhintergrund der Karte, d.h. der Name der CSS-Klasse
+ *  @Param {string} imgLink - Der im JSON angegebene Link zur Bilddatei
+ */
+function renderSmallCard(name, id, color, imgLink) {
+    let cardNo = id.toString().padStart(4, '0');
+    let cardString = `<div class="pokemonType cardNo">#${cardNo}</div>`;
+    let newCard = `
+    <div class="pokemonSmallCard ${color}" id="${id}">
+        <div class="smallCardHeader">${name}</div>
+        <div class="smallCardContent">
+            <div class="pokemonTypes" id="types-${id}">
+                ${cardString}
+            </div>
+            <img src="${imgLink}" alt="${name}" class="pokemonImg" id="image-${id}" onclick="openCard(${id})">
+        </div>
+    </div>`;
+
+    document.getElementById('pokedex').innerHTML += newCard;
+}
+
+
+/*
+ *  Schreibt die zu suchenden Information in das übergebene Feld
+ *
+ *  @Param {string} url - Die URL, von der die Daten geholt werden sollen
+ *  @Param {string} field - Die ID des Feldes, in das das Ergebnis geschrieben werden soll
+ *  @Param {string} colorCode - Hintergrundfarbe, abhängig vom Type
+*/
+async function writeTypeData(url, field, colorCode) {
+    let languageName = await getLanguageName(url);
+
+    let newCode = `
+        <div class="pokemonType ${colorCode}">${languageName}</div>
+    `;
+    document.getElementById(field).innerHTML += newCode;
+}
+
+
+/*
+ *  Gibt die Bezeichnung anhand der eingestellten Sprache zurück
+ *  Funktioniert für folgende Fälle:
+ *      types
+ *      abilities
+ * 
+ *  @Param {string} url - Die url des Objekts, für das ich die Übersetzung brauche
+ */
+async function getLanguageName(url) {
+    let urlData = await fetch(url);
+    let urlJSON = await urlData.json();
+
+    for (let i = 0; i < urlJSON['names'].length; i++) {
+        const element = urlJSON['names'][i];
+        if (element.language.name == curLanguage) {  // das geht bei JSON-Daten (statt: element['language']['name']). Schreibt sich halt einfacher
+            return element.name;
+        }
+    }
+}
+
+
+/*
+ *  Gibt den Namen der Figur zurück, abhängig von der eingestellten Sprache.
+ *  Ausgelagert in separate Funktion, weil der Zugriff hier ein wenig anders erfolgt, als in getLanguageName
+ *
+ *  @Param {string} url - Die url des Objektes, in der ich die Übersetzung finde
+ */
+async function getSpeciesName(url) {
+    let urlData = await fetch(url);
+    let urlJSON = await urlData.json();
+
+    for (let i = 0; i < urlJSON['genera'].length; i++) {
+        const element = urlJSON['genera'][i];
+        if (element.language.name == curLanguage) {
+            return element.genus;
+        }
+    }
+}
+
+
+/*
+ *  Öffnet eine Karte in großer Ansicht
+ *
+ *  @Param {string} cardID - Die ID der Karte, die geöffnet werden soll
+ */
+async function openCard(cardID) {
+    document.getElementById('openCard').style.display = 'flex';  // sichtbar schalten
+    curCard = +cardID;
+
+    // Daten laden und einfügen
+    let url = `https://pokeapi.co/api/v2/pokemon/${cardID}/`;
+    let response = await fetch(url);
+    let respJson = await response.json();
+
+    // Grunddaten eintragen
+    let name = await getLanguageName(`https://pokeapi.co/api/v2/pokemon-species/${cardID}/`);
+    document.getElementById('lgTitle').innerHTML = name;
+    document.getElementById('lgNumber').innerHTML = '#' + cardID.toString().padStart(4, '0');
+
+    // id cardUpperPart bekommt Farbklasse, je nach erstem type
+    color = `color${respJson['types'][0]['type']['name']}`;
+    document.getElementById('cardUpperPart').classList.add(color);
+    
+    // types eintragen
+    let typeArray = respJson['types'];
+    document.getElementById('lgTypes').innerHTML = '';
+    for (let i = 0; i < typeArray.length; i++) {
+        const element = typeArray[i];
+        let typeUrl = element['type']['url'];
+        color = `color${element['type']['name']}dark`;
+        let languageName = await getLanguageName(typeUrl);
+
+        let newCode = `
+        <span class="lgType ${color}">${languageName}</span>
+        `;
+        document.getElementById('lgTypes').innerHTML += newCode;
+    }
+
+    // Bild einfügen
+    document.getElementById('lgImg').src = getImgLink(respJson);
+
+    // Spezies einfügen
+    let languageSpecies = await getSpeciesName(`https://pokeapi.co/api/v2/pokemon-species/${cardID}/`);
+    document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;
+
+    // Größe einfügen
+    document.getElementById('lgInfoHeight').innerHTML = (+respJson['height'])/10 + ' m';
+
+    // Gewicht einfügen
+    document.getElementById('lgInfoWeight').innerHTML = (+respJson['weight'])/10 + ' kg';
+
+    // Fähigkeiten einfügen
+    let abilities = [];
+    for (let i = 0; i < respJson['abilities'].length; i++) {
+        const element = respJson['abilities'][i];
+        let languageName = await getLanguageName(element['ability']['url']);
+        abilities.push(languageName);
+    }
+    document.getElementById('lgInfoAbi').innerHTML = abilities.join(', ');
+
+    // Statistiken laden
+    let values = [];
+    let valuesArray = respJson['stats'];
+    for (let i = 0; i < valuesArray.length; i++) {
+        const value = valuesArray[i];
+        values.push(value['base_stat']);
+    }
+    renderStats(values);
+}
+
+
+/* 
+ * Schließt das Vergrößerungsfenster
+ */
+function closeCard() {
+    document.getElementById('openCard').style.display = 'none';  /* Die Zuweisung der Klasse d-none hat hier nicht funktioniert ... warum nicht? */
+}
+
+
+/*
+ *  Blättert in der Vergrößerungsansicht
+ *  Vorsicht: Da die IDs nicht unbedingt fortlaufend sind, muss ich erst nachsehen, an welcher Stelle die aktuelle ID im Array curCardSet steht.
+ * 
+ *  @Param {string} whereTo - 'previous' oder 'next'
+ */
+function goToCard(whereTo, event) {
+    event.stopPropagation();
+    let pos = curCardSet.indexOf(curCard);
+    if (whereTo == 'previous') {
+        (pos == 0) ? curCard = curCardSet[curCardSet.length - 1] : curCard = curCardSet[pos - 1];
+    } else {
+        (pos == curCardSet.length - 1) ? curCard = curCardSet[0] : curCard = curCardSet[pos + 1];
+    }
+    openCard(curCard);
+}
+
+
+/*
+ *  Blättert zur vorherigen Übersichtsseite
+ */
+function prevPage() {
+    if (startNumber >= 40) {
+        startNumber = startNumber - 40;
+        loadListOfPokemons(startNumber);
+    }
+}
+
+
+/*
+ *  Blättert zur nächsten Übersichtsseite
+ */
+function nextPage() {
+    if (startNumber <= maxNumber - 40) {
+        startNumber = startNumber + 40;
+        loadListOfPokemons(startNumber);
+    }
+}
+
+
+/*
+ *  Zeigt abhängig von der aktuellen Start-Nummer die Buttons 'vorherige Seite' und/oder 'nächste Seite' an
+ */
+function showHideNextPrevious() {
+    (startNumber < 40) ? document.getElementById('btnPrevious').classList.add('d-none') : document.getElementById('btnPrevious').classList.remove('d-none');
+    (startNumber > maxNumber - 40) ? document.getElementById('btnNext').classList.add('d-none') : document.getElementById('btnNext').classList.remove('d-none');
+}
+
+
+/*
+ *  Ändert die Spracheinstellung und lädt mit dieser die Seite neu.
+ *
+ *  @Param {string} language - Das Kürzel der Sprache, die geladen werden soll. Vorgabe: 'de'.
+ */
+function changeLanguage(language) {
+    console.log('changeLanguage gestartet');
+    // Ziehen der Spracheinstellungen/Übersetzungen
+    curLanguage = language;
+    switch (language) {
+        case 'de':
+            translations = translation_de;
+            chartLabels = chartLabels_de;
+            searchPlaceholder = searchPlaceholder_de;
+            break;
+        case 'en':
+            translations = translation_en;
+            chartLabels = chartLabels_en;
+            searchPlaceholder = searchPlaceholder_en;
+            break;
+        case 'fr':
+            translations = translation_fr;
+            chartLabels = chartLabels_fr;
+            searchPlaceholder = searchPlaceholder_fr;
+            break;
+        case 'es':
+            translations = translation_es;
+            chartLabels = chartLabels_es;
+            searchPlaceholder = searchPlaceholder_es;
+            break;
+        case 'it':
+            translations = translation_it;
+            chartLabels = chartLabels_it;
+            searchPlaceholder = searchPlaceholder_it;
+            break;
+        default:
+            translations = translation_de;
+            chartLabels = chartLabels_de;
+            searchPlaceholder = searchPlaceholder_de;
+            curLanguage = 'de';
+    }
+    // Zuteilen der Übersetzungen
+    for (var key in translations) {
+        document.getElementById(key).innerHTML = translations[key];
+    }
+    document.getElementById('search').placeholder = searchPlaceholder;
+
+    loadListOfPokemons(startNumber);
+}
+
+
+/*
+ *  Zeigt auf der großen Karte zu einer Figur den Bereich 'Information' an
+ */
+function showAbout(event) {
+    event.stopPropagation();
+    document.getElementById('lgAbout').classList.remove('d-none');
+    document.getElementById('lgStats').classList.add('d-none');
+}
+
+
+/*
+ *  Zeigt auf der großen Karte zu einer Figur den Bereich 'Statistiken' an
+ */
+function showStats(event) {
+    event.stopPropagation();
+    document.getElementById('lgAbout').classList.add('d-none');
+    document.getElementById('lgStats').classList.remove('d-none');
+}
+
+
+/*
+ *  Rendert auf der großen Karte zu einer Figur den Chart-Bereich
+ *
+ *  @Param {array} values - Ein Array mit den darzustellenden Werten
+ */
+async function renderStats(values) {
+    // Wichtig: Wenn vorher bereits einmal eine Chart erstellt wurde, muss diese zunächst entfernt werden.
+    //          Ansonsten ist der Canvas bereits belegt und es gibt einen Fehler
+    if (statsChart) {
+        statsChart.clear();
+        statsChart.destroy();
+    }
+    const ctx = document.getElementById('chart').getContext('2d');
+
+    statsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: '',
+                data: values,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false,
+                }
+            },
+            responsive: false,
+            scales: {
+                x: {
+                    max: 255,
+                },
+                y: {
+                    beginAtZero: true,
+                }
+            },
+        }
+    });
+}

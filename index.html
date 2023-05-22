@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-colors.css">
+
+    <link rel="icon" type="image/png" href="img/pokedex-icon.png">
+    <title>Pokémon Dex</title>
+</head>
+
+<body onload="loadListOfPokemons(startNumber)">
+    <h1 class="d-none">Pokémon Dex</h1>
+    <header>
+        <img src="img/logo.png" alt="" class="logo">
+        <div>
+            <input type="text" name="" id="search" placeholder="Suchbegriff eingeben"> <button id="btnSearch">Suchen</button>
+        </div>
+        <div id="flags">
+            <img src="img/de.png" alt="" onclick="changeLanguage('de')">
+            <img src="img/gb.png" alt="" onclick="changeLanguage('en')">
+            <img src="img/fr.png" alt="" onclick="changeLanguage('fr')">
+            <img src="img/es.png" alt="" onclick="changeLanguage('es')">
+            <img src="img/it.png" alt="" onclick="changeLanguage('it')">
+        </div>
+    </header>
+
+    <section id="pokedex">
+        <!-- Hier werden die kleinen Karten hineingerendert -->
+    </section>
+
+
+    <!-- Darstellung einer geöffneten Karte -->
+    <section id="openCard" style="display: none;" onclick="closeCard()">
+        <img src="img/close.png" alt="Schließen-Button" id="magnifyCloseButton" class="pagerImage d-none" onclick="closeCard()">
+
+        <div id="pagerLeftDiv">
+            <img src="img/arrow-left.png" alt="Vorheriges Bild" id="pagerLeftButton" onclick="goToCard('previous', event)">
+        </div>
+
+        <div class="largeCard">
+            <div id="cardUpperPart" class="">
+                <div id="largeCardHeader">
+                    <div id="lgTitle">BULBASAUR</div>
+                    <div id="lgNumber">#001</div>
+                </div>
+                <div id="lgTypes">
+                    
+                </div>
+            </div>
+
+            <div id="cardLowerPart">
+                <img src="1.png" alt="" id="lgImg">
+                <span class="lgSelection"><span onclick="showAbout(event)" id="selectInfo">Information</span><span
+                        onclick="showStats(event)" id="selectStats">Statistiken</span></span>
+                <div id="lgAbout" class="">
+                    <div id="lgInfo">
+                        <span id="lblInfoSpecies">Spezies</span> <span id="lgInfoSpecies"></span>
+                        <span id="lblInfoHeight">Größe</span> <span id="lgInfoHeight"></span>
+                        <span id="lblInfoWeight">Gewicht</span> <span id="lgInfoWeight"></span>
+                        <span id="lblInfoAbilities">Fähigkeiten</span> <span id="lgInfoAbi"></span>
+                    </div>
+                </div>
+                <div id="lgStats" class="d-none">
+                    <div id="lgChart">
+                        <canvas id="chart" style="width: 100%; height: 150px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="pagerBoth">
+            <img src="img/arrow-left.png" alt="Vorheriges Bild" id="pagerLeftButton" onclick="goToCard('previous', event)">
+            <img src="img/arrow-right.png" alt="Vorheriges Bild" id="pagerRightButton" onclick="goToCard('next', event)">
+        </div>
+
+        <div id="pagerRightDiv">
+            <img src="img/arrow-right.png" alt="Vorheriges Bild" id="pagerRightButton" onclick="goToCard('next', event)">
+        </div>
+    </section>
+
+    <footer>
+        <button id="btnPrevious" onclick="prevPage()">vorherige Seite</button>
+        <button id="btnNext" onclick="nextPage()">nächste Seite</button>
+        <div class="align-right">
+            <a href="imprint.html"><button id="btnImprint" class="text-smaller">Impressum</button></a>
+            <a href="privacypolicy.html"><button id="btnPolicy" class="text-smaller">Datenschutz</button></a>
+        </div>
+    </footer>
+</body>
+
+</html>

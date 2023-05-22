@@ -1,0 +1,39 @@
+/* Type colours thanks to: https://gist.github.com/apaleslimghost/0d25ec801ca4fc43317bcff298af43c3 */
+
+.colornormal{background-color: #A8A77A55}
+.colorfire{background-color: #EE813055}
+.colorwater{background-color: #6390F055}
+.colorelectric{background-color: #F7D02C55}
+.colorgrass{background-color: #7AC74C55}
+.colorice{background-color: #96D9D655}
+.colorfighting{background-color: #C22E2855}
+.colorpoison{background-color: #A33EA155}
+.colorground{background-color: #E2BF6555}
+.colorflying{background-color: #A98FF355}
+.colorpsychic{background-color: #F9558755}
+.colorbug{background-color: #A6B91A55}
+.colorrock{background-color: #B6A13655}
+.colorghost{background-color: #73579755}
+.colordragon{background-color: #6F35FC55}
+.colordark{background-color: #70574655}
+.colorsteel{background-color: #B7B7CE55}
+.colorfairy{background-color: #D685AD55}
+
+.colornormaldark{background-color: #A8A77ACC}
+.colorfiredark{background-color: #EE8130CC}
+.colorwaterdark{background-color: #6390F0AA}
+.colorelectricdark{background-color: #F7D02CFF}
+.colorgrassdark{background-color: #7AC74C}
+.coloricedark{background-color: #96D9D6AA}
+.colorfightingdark{background-color: #C22E28AA}
+.colorpoisondark{background-color: #A33EA1AA}
+.colorgrounddark{background-color: #E2BF65CC}
+.colorflyingdark{background-color: #A98FF3AA}
+.colorpsychicdark{background-color: #F95587AA}
+.colorbugdark{background-color: #A6B91ACC}
+.colorrockdark{background-color: #B6A136AA}
+.colorghostdark{background-color: #735797AA}
+.colordragondark{background-color: #6F35FCAA}
+.colordarkdark{background-color: #705746AA}
+.colorsteeldark{background-color: #B7B7CEAA}
+.colorfairydark{background-color: #D685ADCC}
