@@ -60,6 +60,7 @@ header {
     height: 50px;
     /* margin-top: 16px;
     margin-left: 16px; */
+    cursor: pointer;
 }
 #flags img {
     border: 1px solid white;
@@ -71,6 +72,20 @@ header {
 }
 #search:focus {
     outline: none;
+}
+#closeSearch {
+    text-align: center;
+}
+#btnCloseSearch {
+    background-color: #EF5350;
+    color: white;
+    padding: 8px;
+}
+#btnCloseSearch:hover {
+    /* transform: scale(110%); */
+    color:#EF5350;
+    background-color: white;
+    border: 1px solid #EF5350;
 }
 footer {
     background-color: #EF5350;

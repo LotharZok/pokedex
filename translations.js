@@ -13,6 +13,7 @@ const translation_de = {
     'btnSearch': 'Suchen',
     'btnImprint': 'Impressum',
     'btnPolicy': 'Datenschutz',
+    'btnCloseSearch': 'Suchergebnis schließen',
     'selectInfo': 'Information',
     'selectStats': 'Statistiken',
     'lblInfoSpecies': 'Spezies',
@@ -33,6 +34,7 @@ const translation_en = {
     'btnSearch': 'Search',
     'btnImprint': 'Disclaimer (german)',
     'btnPolicy': 'Privacy Policy (german)',
+    'btnCloseSearch': 'Close search results',
     'selectInfo': 'Information',
     'selectStats': 'Statistics',
     'lblInfoSpecies': 'Species',
@@ -53,6 +55,7 @@ const translation_fr = {
     'btnSearch': 'Rechercher',
     'btnImprint': 'Avertissements (allemand)',
     'btnPolicy': 'PDC (allemand)',
+    'btnCloseSearch': 'Fermer les résultats de la recherche',
     'selectInfo': 'Informations',
     'selectStats': 'Statistiques',
     'lblInfoSpecies': 'Espèce',
@@ -73,6 +76,7 @@ const translation_es = {
     'btnSearch': 'Buscar',
     'btnImprint': 'LDR (alemán)',
     'btnPolicy': 'PP (alemán)',
+    'btnCloseSearch': 'Cerrar resultado de búsqueda',
     'selectInfo': 'Información',
     'selectStats': 'Estadísticas',
     'lblInfoSpecies': 'Especie',
@@ -93,6 +97,7 @@ const translation_it = {
     'btnSearch': 'Cerca',
     'btnImprint': 'Avvertenze (tedesco)',
     'btnPolicy': 'PP (tedesco)',
+    'btnCloseSearch': 'Chiudere i risultati della ricerca',
     'selectInfo': 'Informazioni',
     'selectStats': 'Statistiche',
     'lblInfoSpecies': 'Specie',
@@ -111,3 +116,60 @@ const searchPlaceholder_it = 'Cerca in Pokémon Dex';
 let translations = translation_de;
 let chartLabels = chartLabels_de;
 let searchPlaceholder = searchPlaceholder_de;
+
+
+/*
+ *  Ändert die Spracheinstellung und lädt mit dieser die Seite neu.
+ *
+ *  @Param {string} language - Das Kürzel der Sprache, die geladen werden soll. Vorgabe: 'de'.
+ */
+function changeLanguage(language) {
+    // console.log('changeLanguage gestartet');
+    // Ziehen der Spracheinstellungen/Übersetzungen
+    curLanguage = language;
+    switch (language) {
+        case 'de':
+            translations = translation_de;
+            chartLabels = chartLabels_de;
+            searchPlaceholder = searchPlaceholder_de;
+            searchArray = deSearchArray;
+            break;
+        case 'en':
+            translations = translation_en;
+            chartLabels = chartLabels_en;
+            searchPlaceholder = searchPlaceholder_en;
+            searchArray = enSearchArray;
+            break;
+        case 'fr':
+            translations = translation_fr;
+            chartLabels = chartLabels_fr;
+            searchPlaceholder = searchPlaceholder_fr;
+            searchArray = frSearchArray;
+            break;
+        case 'es':
+            translations = translation_es;
+            chartLabels = chartLabels_es;
+            searchPlaceholder = searchPlaceholder_es;
+            searchArray = esSearchArray;
+            break;
+        case 'it':
+            translations = translation_it;
+            chartLabels = chartLabels_it;
+            searchPlaceholder = searchPlaceholder_it;
+            searchArray = itSearchArray;
+            break;
+        default:
+            translations = translation_de;
+            chartLabels = chartLabels_de;
+            searchPlaceholder = searchPlaceholder_de;
+            searchArray = deSearchArray;
+            curLanguage = 'de';
+    }
+    // Zuteilen der Übersetzungen
+    for (var key in translations) {
+        document.getElementById(key).innerHTML = translations[key];
+    }
+    document.getElementById('search').placeholder = searchPlaceholder;
+
+    loadListOfPokemons(startNumber);
+}

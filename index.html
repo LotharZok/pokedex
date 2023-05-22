@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
     <script src="translations.js"></script>
     <script src="script.js"></script>
+    <script src="search.js"></script>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style-colors.css">
@@ -17,12 +18,14 @@
     <title>Pokémon Dex</title>
 </head>
 
-<body onload="loadListOfPokemons(startNumber)">
+<body onload="init()">
     <h1 class="d-none">Pokémon Dex</h1>
     <header>
-        <img src="img/logo.png" alt="" class="logo">
+        <img src="img/logo.png" alt="" class="logo" onclick="loadListOfPokemons(startNumber)">
         <div>
-            <input type="text" name="" id="search" placeholder="Suchbegriff eingeben"> <button id="btnSearch">Suchen</button>
+            <!-- <form onclick="startSearch()"> -->
+                <input type="text" name="" id="search" placeholder="Suchbegriff eingeben" required minlength="3"> <button id="btnSearch" onclick="startSearch()">Suchen</button>
+            <!-- </form> -->
         </div>
         <div id="flags">
             <img src="img/de.png" alt="" onclick="changeLanguage('de')">
@@ -37,6 +40,9 @@
         <!-- Hier werden die kleinen Karten hineingerendert -->
     </section>
 
+    <section id="closeSearch">
+        <button id="btnCloseSearch" onclick="loadListOfPokemons(startNumber)">Suchergebnis schließen</button>
+    </section>
 
     <!-- Darstellung einer geöffneten Karte -->
     <section id="openCard" style="display: none;" onclick="closeCard()">

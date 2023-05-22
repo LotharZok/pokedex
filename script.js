@@ -9,7 +9,23 @@ let curCardSet = [];    // Enthält die Karten des aktuell angezeigten Sets. Da 
 let statsChart = null;  // Der Chart für die Statistics
 
 
+/*
+ *  Startet den Aufbau der Seite. Wird beim Laden der Seite aufgerufen.
+ */
+function init() {
+    loadListOfPokemons(startNumber);
+    loadSearchData();  // NICHT asynchron, damit die Suchdaten nebenbei geladen werden können
+}
+
+
+/*
+ *  Startet das Laden der Übersicht für die Pokemons
+ *
+ *  @Param {integer} start - Die Nummer, mit der bei der Anzeige gestartet werden soll. Wird zum Blättern benötigt.
+ */
 async function loadListOfPokemons(start) {
+    resetSearch();  // evtl. vorhandene Sucheinträge werden gelöscht
+
     let url = `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=40`; // offset = start (von 0 ausgehend), limit = anzahl
     let response = await fetch(url);
     let respJson = await response.json();
@@ -25,11 +41,17 @@ async function loadListOfPokemons(start) {
     showHideNextPrevious();
 }
 
+
+/*
+ *  Lädt die Daten einer Pokemon-Karte
+ *
+ *  @Param {string} url - Die URL der Karte, deren Daten geladen werden sollen.
+ */
 async function loadPokemonByUrl(url) {
     let response = await fetch(url);
     let respJson = await response.json();
 
-    console.log(respJson);
+    // console.log(respJson);
     // Variablen setzen, die ich noch brauche
     curCardSet.push(respJson.id);
     let color = `color${respJson['types'][0]['type']['name']}`;
@@ -171,7 +193,7 @@ async function openCard(cardID) {
     let respJson = await response.json();
 
     // Grunddaten eintragen
-    let name = await getLanguageName(`https://pokeapi.co/api/v2/pokemon-species/${cardID}/`);
+    let name = await getLanguageName(respJson['species']['url']);
     document.getElementById('lgTitle').innerHTML = name;
     document.getElementById('lgNumber').innerHTML = '#' + cardID.toString().padStart(4, '0');
 
@@ -198,7 +220,7 @@ async function openCard(cardID) {
     document.getElementById('lgImg').src = getImgLink(respJson);
 
     // Spezies einfügen
-    let languageSpecies = await getSpeciesName(`https://pokeapi.co/api/v2/pokemon-species/${cardID}/`);
+    let languageSpecies = await getSpeciesName(respJson['species']['url']);
     document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;
 
     // Größe einfügen
@@ -281,57 +303,6 @@ function nextPage() {
 function showHideNextPrevious() {
     (startNumber < 40) ? document.getElementById('btnPrevious').classList.add('d-none') : document.getElementById('btnPrevious').classList.remove('d-none');
     (startNumber > maxNumber - 40) ? document.getElementById('btnNext').classList.add('d-none') : document.getElementById('btnNext').classList.remove('d-none');
-}
-
-
-/*
- *  Ändert die Spracheinstellung und lädt mit dieser die Seite neu.
- *
- *  @Param {string} language - Das Kürzel der Sprache, die geladen werden soll. Vorgabe: 'de'.
- */
-function changeLanguage(language) {
-    console.log('changeLanguage gestartet');
-    // Ziehen der Spracheinstellungen/Übersetzungen
-    curLanguage = language;
-    switch (language) {
-        case 'de':
-            translations = translation_de;
-            chartLabels = chartLabels_de;
-            searchPlaceholder = searchPlaceholder_de;
-            break;
-        case 'en':
-            translations = translation_en;
-            chartLabels = chartLabels_en;
-            searchPlaceholder = searchPlaceholder_en;
-            break;
-        case 'fr':
-            translations = translation_fr;
-            chartLabels = chartLabels_fr;
-            searchPlaceholder = searchPlaceholder_fr;
-            break;
-        case 'es':
-            translations = translation_es;
-            chartLabels = chartLabels_es;
-            searchPlaceholder = searchPlaceholder_es;
-            break;
-        case 'it':
-            translations = translation_it;
-            chartLabels = chartLabels_it;
-            searchPlaceholder = searchPlaceholder_it;
-            break;
-        default:
-            translations = translation_de;
-            chartLabels = chartLabels_de;
-            searchPlaceholder = searchPlaceholder_de;
-            curLanguage = 'de';
-    }
-    // Zuteilen der Übersetzungen
-    for (var key in translations) {
-        document.getElementById(key).innerHTML = translations[key];
-    }
-    document.getElementById('search').placeholder = searchPlaceholder;
-
-    loadListOfPokemons(startNumber);
 }
 
 
