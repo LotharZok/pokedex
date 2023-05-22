@@ -23,6 +23,7 @@ const translation_de = {
 }
 const chartLabels_de = ['KP', 'Angriff', 'Verteidigung', 'Spez.-Angr.', 'Spez.-Vert.', 'Initiative'];
 const searchPlaceholder_de = 'Suche in Pokémon Dex';
+const searchWait_de = 'Bitte warten';
 
 
 /*
@@ -44,6 +45,7 @@ const translation_en = {
 }
 const chartLabels_en = ['HP', 'Attack', 'Defense', 'Sp. Attack', 'Sp. Defense', 'Speed'];
 const searchPlaceholder_en = 'Search in Pokémon Dex';
+const searchWait_en = 'Please wait';
 
 
 /*
@@ -65,6 +67,7 @@ const translation_fr = {
 }
 const chartLabels_fr = ['PV', 'Attaque', 'Défense', 'Att. Spec.', 'Déf. Spec.', 'Vitesse'];
 const searchPlaceholder_fr = 'Rechercher sur Pokémon Dex';
+const searchWait_fr = 'Veuillez patienter';
 
 
 /*
@@ -86,6 +89,7 @@ const translation_es = {
 }
 const chartLabels_es = ['PS', 'Ataque', 'Defensa', 'At. esp.', 'Def. esp.', 'Velocidad'];
 const searchPlaceholder_es = 'Buscar en Pokémon Dex';
+const searchWait_es = 'Espere, por favor';
 
 
 /*
@@ -107,6 +111,7 @@ const translation_it = {
 }
 const chartLabels_it = ['PS', 'Attacco', 'Difesa', 'Att. Sp.', 'Dif. Sp.', 'Velocità'];
 const searchPlaceholder_it = 'Cerca in Pokémon Dex';
+const searchWait_it = 'Attendere prego';
 
 
 /*
@@ -116,6 +121,7 @@ const searchPlaceholder_it = 'Cerca in Pokémon Dex';
 let translations = translation_de;
 let chartLabels = chartLabels_de;
 let searchPlaceholder = searchPlaceholder_de;
+let searchWait = searchWait_de;
 
 
 /*
@@ -132,36 +138,42 @@ function changeLanguage(language) {
             translations = translation_de;
             chartLabels = chartLabels_de;
             searchPlaceholder = searchPlaceholder_de;
+            searchWait = searchWait_de;
             searchArray = deSearchArray;
             break;
         case 'en':
             translations = translation_en;
             chartLabels = chartLabels_en;
             searchPlaceholder = searchPlaceholder_en;
+            searchWait = searchWait_en;
             searchArray = enSearchArray;
             break;
         case 'fr':
             translations = translation_fr;
             chartLabels = chartLabels_fr;
             searchPlaceholder = searchPlaceholder_fr;
+            searchWait = searchWait_fr;
             searchArray = frSearchArray;
             break;
         case 'es':
             translations = translation_es;
             chartLabels = chartLabels_es;
             searchPlaceholder = searchPlaceholder_es;
+            searchWait = searchWait_es;
             searchArray = esSearchArray;
             break;
         case 'it':
             translations = translation_it;
             chartLabels = chartLabels_it;
             searchPlaceholder = searchPlaceholder_it;
+            searchWait = searchWait_it;
             searchArray = itSearchArray;
             break;
         default:
             translations = translation_de;
             chartLabels = chartLabels_de;
             searchPlaceholder = searchPlaceholder_de;
+            searchWait = searchWait_de;
             searchArray = deSearchArray;
             curLanguage = 'de';
     }

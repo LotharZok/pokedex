@@ -13,12 +13,11 @@ let resultArray = [];
 
 /* 
  *  Startet das Laden der Suchdaten. Ruft hierzu Unterfunktionen auf.
+ *
+ *  Der Code wurde bewusst weitgehend getrennt vom üblichen Code gehalten, damit das Laden der Such-Infos parallel erfolgen kann
  */
 async function loadSearchData() {
-    // date wurde zur Kontrolle eingefügt, um bei der Entwicklung zu sehen, wie lange die Funktion braucht
-    // Vorerst im Code gelassen, falls ich das nochmal brauche, aber zumindest deaktiviert
-    // let date = new Date().toISOString();
-    // console.log(date);
+    document.getElementById('search').placeholder = searchWait;
     document.getElementById('search').disabled = true;
     let url = 'https://pokeapi.co/api/v2/pokemon?limit=1300&offset=0';
     let dataset = await fetch(url); // Das ist ein Array mit allen Pokemons (es gibt. z.Z. 1281)
@@ -33,8 +32,7 @@ async function loadSearchData() {
 
     setSearchArray();
     document.getElementById('search').disabled = false;
-    // date = new Date().toISOString();
-    // console.log(date);
+    document.getElementById('search').placeholder = searchPlaceholder;
 }
 
 
