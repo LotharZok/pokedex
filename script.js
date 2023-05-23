@@ -201,8 +201,31 @@ async function openCard(cardID) {
     color = `color${respJson['types'][0]['type']['name']}`;
     document.getElementById('cardUpperPart').classList.add(color);
     
-    // types eintragen
-    let typeArray = respJson['types'];
+    // Typen eintragen
+    await openCardAddTypes(respJson['types']);
+
+    // Weitere Daten einfügen
+    document.getElementById('lgImg').src = getImgLink(respJson);                          // Bild
+    let languageSpecies = await getSpeciesName(respJson['species']['url']);
+    document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;                 // Spezies
+    document.getElementById('lgInfoHeight').innerHTML = (+respJson['height'])/10 + ' m';  // Größe
+    document.getElementById('lgInfoWeight').innerHTML = (+respJson['weight'])/10 + ' kg'; // Gewicht
+
+    // Fähigkeiten einfügen
+    await openCardAddAbilities(respJson);
+
+    // Statistiken laden
+    openCardAddStats(respJson);
+}
+
+
+/*
+ *  Ergänzt die Typangaben zur großen geöffneten Karte
+ *  Ausgelagert, damit openCard kürzer ist ... hat ansonsten keinen Sinn. Leichter lesbar wird es m.E. nicht...
+ * 
+ *  @Param {array} typeArray - Das Array mit den einzelnen Typen. Enthält jeweils ein JSON mit weiteren Infos
+ */
+async function openCardAddTypes(typeArray) {
     document.getElementById('lgTypes').innerHTML = '';
     for (let i = 0; i < typeArray.length; i++) {
         const element = typeArray[i];
@@ -215,21 +238,16 @@ async function openCard(cardID) {
         `;
         document.getElementById('lgTypes').innerHTML += newCode;
     }
+}
 
-    // Bild einfügen
-    document.getElementById('lgImg').src = getImgLink(respJson);
 
-    // Spezies einfügen
-    let languageSpecies = await getSpeciesName(respJson['species']['url']);
-    document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;
-
-    // Größe einfügen
-    document.getElementById('lgInfoHeight').innerHTML = (+respJson['height'])/10 + ' m';
-
-    // Gewicht einfügen
-    document.getElementById('lgInfoWeight').innerHTML = (+respJson['weight'])/10 + ' kg';
-
-    // Fähigkeiten einfügen
+/*
+ *  Ergänzt die Fähigkeiten zur großen geöffneten Karte
+ *  Ausgelagert, damit openCard kürzer ist ... hat ansonsten keinen Sinn. Leichter lesbar wird es m.E. nicht...
+ * 
+ *  @Param {json} respJson - Ein JSON mit allen benötigten Infos
+ */
+async function openCardAddAbilities(respJson) {
     let abilities = [];
     for (let i = 0; i < respJson['abilities'].length; i++) {
         const element = respJson['abilities'][i];
@@ -237,8 +255,16 @@ async function openCard(cardID) {
         abilities.push(languageName);
     }
     document.getElementById('lgInfoAbi').innerHTML = abilities.join(', ');
+}
 
-    // Statistiken laden
+
+/*
+ *  Ergänzt die Statistiken zur großen geöffneten Karte
+ *  Ausgelagert, damit openCard kürzer ist ... hat ansonsten keinen Sinn. Leichter lesbar wird es m.E. nicht...
+ * 
+ *  @Param {json} respJson - Ein JSON mit allen benötigten Infos
+ */
+function openCardAddStats(respJson) {
     let values = [];
     let valuesArray = respJson['stats'];
     for (let i = 0; i < valuesArray.length; i++) {

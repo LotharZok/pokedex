@@ -110,6 +110,7 @@ function setSearchArray() {
  *  Startet eine Suche und zeigt ggf. das Ergebnis an
  */
 async function startSearch() {
+    resultArray = [];  // Falls bereits ein Suchergebnis vorhanden ist, dieses löschen
     if (!document.getElementById('search').checkValidity()) {
         alert(document.getElementById('search').validationMessage);
     } else {

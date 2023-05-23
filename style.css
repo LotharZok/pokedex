@@ -10,22 +10,21 @@
 }
 /* ENDE Einbindung der Schriften */
 
+
+/* Allgemeine Einstellungen */
 body {
     margin: 0;
     font-family: 'Lato', 'Arial', sans-serif;
     position: relative;
 }
-
 * {
-    transition: all 0.125s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
-
 h1 {
     /* text-align: center; */
     margin-block-start: 0;
     margin-block-end: 0;
 }
-
 h3 {
     margin-block-end: 0;
 }
@@ -44,6 +43,21 @@ h3 {
     font-weight: normal;
     font-size: 10px;
 }
+button {
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    color: white;
+    font-weight: bold;
+}
+button:hover {
+    background-color: rgba(255, 255, 255);
+    color: #EF5350;
+}
+/* ENDE Allgemeine Einstellungen */
+
+
+/* Einstellungen Seite */
 header {
     background-color: #EF5350;
     color: white;
@@ -58,13 +72,14 @@ header {
 }
 .logo {
     height: 50px;
-    /* margin-top: 16px;
-    margin-left: 16px; */
     cursor: pointer;
 }
 #flags img {
     border: 1px solid white;
     cursor: pointer;
+}
+#flags img:hover {
+    border: 1px solid black;
 }
 #search {
     width: 200px;
@@ -72,20 +87,6 @@ header {
 }
 #search:focus {
     outline: none;
-}
-#closeSearch {
-    text-align: center;
-}
-#btnCloseSearch {
-    background-color: #EF5350;
-    color: white;
-    padding: 8px;
-}
-#btnCloseSearch:hover {
-    /* transform: scale(110%); */
-    color:#EF5350;
-    background-color: white;
-    border: 1px solid #EF5350;
 }
 footer {
     background-color: #EF5350;
@@ -98,29 +99,19 @@ footer {
     height: 40px;
     bottom: 0;
 }
-button {
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-    /* border-radius: 6px; */
-    color: white;
-    font-weight: bold;
-}
+/* ENDE Einstellungen Seite */
 
-button:hover {
-    background-color: rgba(255, 255, 255);
-    color: #EF5350;
-}
 
+/* Einstellungen Liste der Pokemons */
 #pokedex {
     padding: 16px;
     margin-bottom: 55px;
 
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
 }
-
 .pokemonSmallCard {
     width: 200px;
     height: 140px;
@@ -129,7 +120,6 @@ button:hover {
     display: flex;
     flex-direction: column;
 }
-
 .smallCardHeader {
     height: 30px;
     text-align: center;
@@ -148,26 +138,24 @@ button:hover {
     margin: 0 4px 0 4px;
     text-align: center;
 }
-
 .pokemonType {
     border-radius: 10px;
 }
 .cardNo {
     border: 1px solid darkgrey;
 }
-
 .pokemonImg {
     position: relative;
     width: 50%;
 }
-
 .pokemonImg:hover {
     transform: scale(120%);
     cursor: pointer;
 }
+/* ENDE Einstellungen Liste der Pokemons */
 
 
-
+/* Einstellungen Geöffnete Karten */
 #openCard {
     display: flex;
     justify-content: space-evenly;
@@ -204,7 +192,6 @@ button:hover {
     display: flex;
     justify-content: space-between;
     color: black;
-    
 }
 #lgTitle {
     font-size: 24px;
@@ -244,19 +231,19 @@ button:hover {
 #lgStats {
     padding: 0 16px 0 16px;
 }
-
 #lgInfo {
     display: grid;
     grid-template-columns: auto auto;
     row-gap: 4px;
     column-gap: 8px;
 }
-
 .chart {
     margin-right: 8px;
 }
+/* ENDE Einstellungen Geöffnete Karten */
 
 
+/* Einstellungen für das Blättern */
 .pagerImage {
     max-width: 50px;
     opacity: 0.6;
@@ -271,8 +258,6 @@ button:hover {
     opacity: 1;
     transform: scale(110%);
 }
-
-
 #pagerLeftButton,
 #pagerRightButton {
     max-width: 50px;
@@ -280,24 +265,41 @@ button:hover {
     cursor: pointer;
     vertical-align: middle;
 }
-
 #pagerLeftButton {
     margin-left: 4px;
     padding-left: 8px;
 }
-
 #pagerRightButton {
     padding-right: 16px;
 }
-
 #pagerLeftButton:hover,
 #pagerRightButton:hover {
     opacity: 1;
 }
-
 #pagerBoth {
     display: none;
 }
+/* ENDE Einstellungen für das Blättern */
+
+
+/* Einstellungen für die Suche */
+#closeSearch {
+    text-align: center;
+    padding-bottom: 60px;
+    margin-top: -60px;
+}
+#btnCloseSearch {
+    background-color: #EF5350;
+    color: white;
+    padding: 8px;
+}
+#btnCloseSearch:hover {
+    color:#EF5350;
+    background-color: white;
+    border: 1px solid #EF5350;
+}
+/* ENDE Einstellungen für die Suche */
+
 
 /* Einstellungen für schmale Screens */
 @media (max-width: 700px) {

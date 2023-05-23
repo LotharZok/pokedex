@@ -130,7 +130,6 @@ let searchWait = searchWait_de;
  *  @Param {string} language - Das Kürzel der Sprache, die geladen werden soll. Vorgabe: 'de'.
  */
 function changeLanguage(language) {
-    // console.log('changeLanguage gestartet');
     // Ziehen der Spracheinstellungen/Übersetzungen
     curLanguage = language;
     switch (language) {
