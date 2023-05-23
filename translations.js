@@ -131,8 +131,8 @@ let searchWait = searchWait_de;
  */
 function changeLanguage(language) {
     // Ziehen der Spracheinstellungen/Übersetzungen
-    curLanguage = language;
-    switch (language) {
+    curLanguage = language;  // Erstmal generell die Sprache umstellen
+    switch (language) {  // Weitere Spracheinstellungen, je nach gewählter Sprache
         case 'de':
             translations = translation_de;
             chartLabels = chartLabels_de;

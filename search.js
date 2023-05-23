@@ -19,7 +19,7 @@ let resultArray = [];
 async function loadSearchData() {
     document.getElementById('search').placeholder = searchWait;
     document.getElementById('search').disabled = true;
-    let url = 'https://pokeapi.co/api/v2/pokemon?limit=1300&offset=0';
+    let url = 'https://pokeapi.co/api/v2/pokemon?limit=10000&offset=0';  // Damit zukünftige Erweiterungen auch geladen werden: limit: 10000
     let dataset = await fetch(url); // Das ist ein Array mit allen Pokemons (es gibt. z.Z. 1281)
     let json = await dataset.json();
 
@@ -44,7 +44,6 @@ async function loadSearchData() {
 async function getPokemonData(pokeUrl) {
     let dataset = await fetch(pokeUrl); // Das sind jetzt die Daten des Pokemons
     let json = await dataset.json();
-
     let speciesUrl = json['species']['url'];
 
     getSpeciesLanguage(speciesUrl, pokeUrl);
@@ -114,7 +113,7 @@ async function startSearch() {
     if (!document.getElementById('search').checkValidity()) {
         alert(document.getElementById('search').validationMessage);
     } else {
-        curCardSet = [];
+        curCardSet = [];  // Wird benötigt zum Blättern durch die Suchergebnisse
         let searchValue = document.getElementById('search').value;
         for (let i = 0; i < searchArray.length; i++) {
             let element = searchArray[i];
@@ -123,13 +122,13 @@ async function startSearch() {
                 resultArray.push(splitted);
             }
         }
-
+        // Die gefundenen Karten rendern
         document.getElementById('pokedex').innerHTML = '';
         for (let j = 0; j < resultArray.length; j++) {
             let url = resultArray[j][1];
             await loadPokemonByUrl(url);
         }
-
+        // Button 'Suche schließen' sichtbar schalten
         document.getElementById('closeSearch').style.display = 'block';
     }
 }

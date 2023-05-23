@@ -1,5 +1,5 @@
 /*
- *  Globale Variablen
+ *  Globale Variablen (Voreinstellungen)
  */
 let startNumber = 0;    // Aktuelle Startnummer des angezeigten Sets
 let maxNumber = 0;      // maximale Anzahl der Pokemons, wird beim ersten Start gesetzt
@@ -51,7 +51,6 @@ async function loadPokemonByUrl(url) {
     let response = await fetch(url);
     let respJson = await response.json();
 
-    // console.log(respJson);
     // Variablen setzen, die ich noch brauche
     curCardSet.push(respJson.id);
     let color = `color${respJson['types'][0]['type']['name']}`;
@@ -107,15 +106,16 @@ function renderSmallCard(name, id, color, imgLink) {
     let cardNo = id.toString().padStart(4, '0');
     let cardString = `<div class="pokemonType cardNo">#${cardNo}</div>`;
     let newCard = `
-    <div class="pokemonSmallCard ${color}" id="${id}">
-        <div class="smallCardHeader">${name}</div>
-        <div class="smallCardContent">
-            <div class="pokemonTypes" id="types-${id}">
-                ${cardString}
+        <div class="pokemonSmallCard ${color}" id="${id}">
+            <div class="smallCardHeader">${name}</div>
+            <div class="smallCardContent">
+                <div class="pokemonTypes" id="types-${id}">
+                    ${cardString}
+                </div>
+                <img src="${imgLink}" alt="${name}" class="pokemonImg" id="image-${id}" onclick="openCard(${id})">
             </div>
-            <img src="${imgLink}" alt="${name}" class="pokemonImg" id="image-${id}" onclick="openCard(${id})">
         </div>
-    </div>`;
+    `;
 
     document.getElementById('pokedex').innerHTML += newCard;
 }
@@ -152,7 +152,7 @@ async function getLanguageName(url) {
 
     for (let i = 0; i < urlJSON['names'].length; i++) {
         const element = urlJSON['names'][i];
-        if (element.language.name == curLanguage) {  // das geht bei JSON-Daten (statt: element['language']['name']). Schreibt sich halt einfacher
+        if (element['language']['name'] == curLanguage) { 
             return element.name;
         }
     }
@@ -187,34 +187,27 @@ async function openCard(cardID) {
     document.getElementById('openCard').style.display = 'flex';  // sichtbar schalten
     curCard = +cardID;
 
-    // Daten laden und einfügen
+    // Daten laden
     let url = `https://pokeapi.co/api/v2/pokemon/${cardID}/`;
     let response = await fetch(url);
     let respJson = await response.json();
 
-    // Grunddaten eintragen
+    // Grunddaten einfügen
     let name = await getLanguageName(respJson['species']['url']);
     document.getElementById('lgTitle').innerHTML = name;
     document.getElementById('lgNumber').innerHTML = '#' + cardID.toString().padStart(4, '0');
 
-    // id cardUpperPart bekommt Farbklasse, je nach erstem type
+    // id cardUpperPart bekommt eine Farbklasse, je nach erstem type
     color = `color${respJson['types'][0]['type']['name']}`;
     document.getElementById('cardUpperPart').classList.add(color);
     
-    // Typen eintragen
+    // Typen einfügen
     await openCardAddTypes(respJson['types']);
 
-    // Weitere Daten einfügen
-    document.getElementById('lgImg').src = getImgLink(respJson);                          // Bild
-    let languageSpecies = await getSpeciesName(respJson['species']['url']);
-    document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;                 // Spezies
-    document.getElementById('lgInfoHeight').innerHTML = (+respJson['height'])/10 + ' m';  // Größe
-    document.getElementById('lgInfoWeight').innerHTML = (+respJson['weight'])/10 + ' kg'; // Gewicht
+    // Informationen einfügen
+    await openCardAddInformations(respJson);
 
-    // Fähigkeiten einfügen
-    await openCardAddAbilities(respJson);
-
-    // Statistiken laden
+    // Statistiken einfügen
     openCardAddStats(respJson);
 }
 
@@ -234,7 +227,7 @@ async function openCardAddTypes(typeArray) {
         let languageName = await getLanguageName(typeUrl);
 
         let newCode = `
-        <span class="lgType ${color}">${languageName}</span>
+            <span class="lgType ${color}">${languageName}</span>
         `;
         document.getElementById('lgTypes').innerHTML += newCode;
     }
@@ -247,7 +240,15 @@ async function openCardAddTypes(typeArray) {
  * 
  *  @Param {json} respJson - Ein JSON mit allen benötigten Infos
  */
-async function openCardAddAbilities(respJson) {
+async function openCardAddInformations(respJson) {
+    // Weitere Daten einfügen
+    document.getElementById('lgImg').src = getImgLink(respJson);                          // Bild
+    let languageSpecies = await getSpeciesName(respJson['species']['url']);
+    document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;                 // Spezies
+    document.getElementById('lgInfoHeight').innerHTML = (+respJson['height'])/10 + ' m';  // Größe
+    document.getElementById('lgInfoWeight').innerHTML = (+respJson['weight'])/10 + ' kg'; // Gewicht
+    
+    // Fähigkeiten (können mehrere sein)
     let abilities = [];
     for (let i = 0; i < respJson['abilities'].length; i++) {
         const element = respJson['abilities'][i];
