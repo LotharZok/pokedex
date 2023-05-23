@@ -130,6 +130,9 @@ async function startSearch() {
         }
         // Button 'Suche schließen' sichtbar schalten
         document.getElementById('closeSearch').style.display = 'block';
+        // Blättern-Buttons unsichtbar schalten
+        document.getElementById('btnPrevious').classList.add('d-none');
+        document.getElementById('btnNext').classList.add('d-none')
     }
 }
 
@@ -141,4 +144,7 @@ function resetSearch() {
     document.getElementById('search').value = '';
     document.getElementById('closeSearch').style.display = 'none';
     resultArray = [];
+    // Blättern-Buttons sichtbar schalten
+    document.getElementById('btnPrevious').classList.remove('d-none');
+    document.getElementById('btnNext').classList.remove('d-none')
 }

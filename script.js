@@ -199,6 +199,9 @@ async function openCard(cardID) {
 
     // id cardUpperPart bekommt eine Farbklasse, je nach erstem type
     color = `color${respJson['types'][0]['type']['name']}`;
+    // bisherige Farb-Klassen löschen (Kann beim Blättern vorkommen, daß eine Klasse vorhanden ist)
+    // Da außer der Farbklasse keine Klassen eingetragen werden, kann ich auch einfach löschen
+    document.getElementById('cardUpperPart').classList = '';
     document.getElementById('cardUpperPart').classList.add(color);
     
     // Typen einfügen
@@ -247,7 +250,7 @@ async function openCardAddInformations(respJson) {
     document.getElementById('lgInfoSpecies').innerHTML = languageSpecies;                 // Spezies
     document.getElementById('lgInfoHeight').innerHTML = (+respJson['height'])/10 + ' m';  // Größe
     document.getElementById('lgInfoWeight').innerHTML = (+respJson['weight'])/10 + ' kg'; // Gewicht
-    
+
     // Fähigkeiten (können mehrere sein)
     let abilities = [];
     for (let i = 0; i < respJson['abilities'].length; i++) {
