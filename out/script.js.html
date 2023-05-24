@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: script.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: script.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  *  Globale Variablen (Voreinstellungen)
  */
 let startNumber = 0;    // Aktuelle Startnummer des angezeigten Sets
@@ -26,7 +54,7 @@ function init() {
 async function loadListOfPokemons(start) {
     resetSearch();  // evtl. vorhandene Sucheinträge werden gelöscht
 
-    let url = `https://pokeapi.co/api/v2/pokemon?offset=${start}&limit=40`; // offset = start (von 0 ausgehend), limit = anzahl
+    let url = `https://pokeapi.co/api/v2/pokemon?offset=${start}&amp;limit=40`; // offset = start (von 0 ausgehend), limit = anzahl
     let response = await fetch(url);
     let respJson = await response.json();
     curCardSet = [];
@@ -34,7 +62,7 @@ async function loadListOfPokemons(start) {
     document.getElementById('pokedex').innerHTML = '';
     maxNumber = +respJson['count'];  // Setzen der globalen Variablen mit der maximalen Anzahl der Pokemons, die angezeigt werden können
 
-    for (let i = 0; i < respJson.results.length; i++) {
+    for (let i = 0; i &lt; respJson.results.length; i++) {
         const element = respJson.results[i];
         await loadPokemonByUrl(element.url);
     }
@@ -61,7 +89,7 @@ async function loadPokemonByUrl(url) {
 
     // types auswerten und ergänzen
     let typeArray = respJson['types'];
-    for (let i = 0; i < typeArray.length; i++) {
+    for (let i = 0; i &lt; typeArray.length; i++) {
         const element = typeArray[i];
         let typeUrl = element['type']['url'];
         color = `color${element['type']['name']}`;
@@ -104,17 +132,17 @@ function getImgLink(srcJson) {
  */
 function renderSmallCard(name, id, color, imgLink) {
     let cardNo = id.toString().padStart(4, '0');
-    let cardString = `<div class="pokemonType cardNo">#${cardNo}</div>`;
+    let cardString = `&lt;div class="pokemonType cardNo">#${cardNo}&lt;/div>`;
     let newCard = `
-        <div class="pokemonSmallCard ${color}" id="${id}">
-            <div class="smallCardHeader">${name}</div>
-            <div class="smallCardContent">
-                <div class="pokemonTypes" id="types-${id}">
+        &lt;div class="pokemonSmallCard ${color}" id="${id}">
+            &lt;div class="smallCardHeader">${name}&lt;/div>
+            &lt;div class="smallCardContent">
+                &lt;div class="pokemonTypes" id="types-${id}">
                     ${cardString}
-                </div>
-                <img src="${imgLink}" alt="${name}" class="pokemonImg" id="image-${id}" onclick="openCard(${id})">
-            </div>
-        </div>
+                &lt;/div>
+                &lt;img src="${imgLink}" alt="${name}" class="pokemonImg" id="image-${id}" onclick="openCard(${id})">
+            &lt;/div>
+        &lt;/div>
     `;
 
     document.getElementById('pokedex').innerHTML += newCard;
@@ -132,7 +160,7 @@ async function writeTypeData(url, field, colorCode) {
     let languageName = await getLanguageName(url);
 
     let newCode = `
-        <div class="pokemonType ${colorCode}">${languageName}</div>
+        &lt;div class="pokemonType ${colorCode}">${languageName}&lt;/div>
     `;
     document.getElementById(field).innerHTML += newCode;
 }
@@ -150,7 +178,7 @@ async function getLanguageName(url) {
     let urlData = await fetch(url);
     let urlJSON = await urlData.json();
 
-    for (let i = 0; i < urlJSON['names'].length; i++) {
+    for (let i = 0; i &lt; urlJSON['names'].length; i++) {
         const element = urlJSON['names'][i];
         if (element['language']['name'] == curLanguage) { 
             return element.name;
@@ -169,7 +197,7 @@ async function getSpeciesName(url) {
     let urlData = await fetch(url);
     let urlJSON = await urlData.json();
 
-    for (let i = 0; i < urlJSON['genera'].length; i++) {
+    for (let i = 0; i &lt; urlJSON['genera'].length; i++) {
         const element = urlJSON['genera'][i];
         if (element.language.name == curLanguage) {
             return element.genus;
@@ -223,14 +251,14 @@ async function openCard(cardID) {
  */
 async function openCardAddTypes(typeArray) {
     document.getElementById('lgTypes').innerHTML = '';
-    for (let i = 0; i < typeArray.length; i++) {
+    for (let i = 0; i &lt; typeArray.length; i++) {
         const element = typeArray[i];
         let typeUrl = element['type']['url'];
         color = `color${element['type']['name']}dark`;
         let languageName = await getLanguageName(typeUrl);
 
         let newCode = `
-            <span class="lgType ${color}">${languageName}</span>
+            &lt;span class="lgType ${color}">${languageName}&lt;/span>
         `;
         document.getElementById('lgTypes').innerHTML += newCode;
     }
@@ -253,7 +281,7 @@ async function openCardAddInformations(respJson) {
 
     // Fähigkeiten (können mehrere sein)
     let abilities = [];
-    for (let i = 0; i < respJson['abilities'].length; i++) {
+    for (let i = 0; i &lt; respJson['abilities'].length; i++) {
         const element = respJson['abilities'][i];
         let languageName = await getLanguageName(element['ability']['url']);
         abilities.push(languageName);
@@ -271,7 +299,7 @@ async function openCardAddInformations(respJson) {
 function openCardAddStats(respJson) {
     let values = [];
     let valuesArray = respJson['stats'];
-    for (let i = 0; i < valuesArray.length; i++) {
+    for (let i = 0; i &lt; valuesArray.length; i++) {
         const value = valuesArray[i];
         values.push(value['base_stat']);
     }
@@ -321,7 +349,7 @@ function prevPage() {
  *  Blättert zur nächsten Übersichtsseite
  */
 function nextPage() {
-    if (startNumber <= maxNumber - 40) {
+    if (startNumber &lt;= maxNumber - 40) {
         startNumber = startNumber + 40;
         loadListOfPokemons(startNumber);
     }
@@ -332,7 +360,7 @@ function nextPage() {
  *  Zeigt abhängig von der aktuellen Start-Nummer die Buttons 'vorherige Seite' und/oder 'nächste Seite' an
  */
 function showHideNextPrevious() {
-    (startNumber < 40) ? document.getElementById('btnPrevious').classList.add('d-none') : document.getElementById('btnPrevious').classList.remove('d-none');
+    (startNumber &lt; 40) ? document.getElementById('btnPrevious').classList.add('d-none') : document.getElementById('btnPrevious').classList.remove('d-none');
     (startNumber > maxNumber - 40) ? document.getElementById('btnNext').classList.add('d-none') : document.getElementById('btnNext').classList.remove('d-none');
 }
 
@@ -407,4 +435,26 @@ async function renderStats(values) {
             },
         }
     });
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeLanguage">changeLanguage</a></li><li><a href="global.html#closeCard">closeCard</a></li><li><a href="global.html#getImgLink">getImgLink</a></li><li><a href="global.html#getLanguageName">getLanguageName</a></li><li><a href="global.html#getPokemonData">getPokemonData</a></li><li><a href="global.html#getSpeciesLanguage">getSpeciesLanguage</a></li><li><a href="global.html#getSpeciesName">getSpeciesName</a></li><li><a href="global.html#goToCard">goToCard</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadListOfPokemons">loadListOfPokemons</a></li><li><a href="global.html#loadPokemonByUrl">loadPokemonByUrl</a></li><li><a href="global.html#loadSearchData">loadSearchData</a></li><li><a href="global.html#nextPage">nextPage</a></li><li><a href="global.html#openCard">openCard</a></li><li><a href="global.html#openCardAddInformations">openCardAddInformations</a></li><li><a href="global.html#openCardAddStats">openCardAddStats</a></li><li><a href="global.html#openCardAddTypes">openCardAddTypes</a></li><li><a href="global.html#prevPage">prevPage</a></li><li><a href="global.html#renderSmallCard">renderSmallCard</a></li><li><a href="global.html#renderStats">renderStats</a></li><li><a href="global.html#resetSearch">resetSearch</a></li><li><a href="global.html#setSearchArray">setSearchArray</a></li><li><a href="global.html#showAbout">showAbout</a></li><li><a href="global.html#showHideNextPrevious">showHideNextPrevious</a></li><li><a href="global.html#showStats">showStats</a></li><li><a href="global.html#startNumber">startNumber</a></li><li><a href="global.html#startSearch">startSearch</a></li><li><a href="global.html#translation_de">translation_de</a></li><li><a href="global.html#translation_en">translation_en</a></li><li><a href="global.html#translation_es">translation_es</a></li><li><a href="global.html#translation_fr">translation_fr</a></li><li><a href="global.html#translation_it">translation_it</a></li><li><a href="global.html#translations">translations</a></li><li><a href="global.html#writeTypeData">writeTypeData</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 24 2023 13:34:59 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

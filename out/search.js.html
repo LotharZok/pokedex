@@ -1,4 +1,32 @@
-// Die Such-Arrays enthalten später die Namen der Pokemons in der jeweiligen Sprache und
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: search.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: search.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Die Such-Arrays enthalten später die Namen der Pokemons in der jeweiligen Sprache und
 // getrennt durch ein ~~~ den Link zum Pokemon. Auf diese Weise können die Daten dann 
 // mit einer einfachen Suche mittels .includes(...) durchsucht werden.
 let deSearchArray = [];
@@ -19,12 +47,12 @@ let resultArray = [];
 async function loadSearchData() {
     document.getElementById('search').placeholder = searchWait;
     document.getElementById('search').disabled = true;
-    let url = 'https://pokeapi.co/api/v2/pokemon?limit=10000&offset=0';  // Damit zukünftige Erweiterungen auch geladen werden: limit: 10000
+    let url = 'https://pokeapi.co/api/v2/pokemon?limit=10000&amp;offset=0';  // Damit zukünftige Erweiterungen auch geladen werden: limit: 10000
     let dataset = await fetch(url); // Das ist ein Array mit allen Pokemons (es gibt. z.Z. 1281)
     let json = await dataset.json();
 
     jsonArray = json['results'];
-    for (let i = 0; i < jsonArray.length; i++) {
+    for (let i = 0; i &lt; jsonArray.length; i++) {
         const element = jsonArray[i];
 
         await getPokemonData(element['url']);
@@ -60,7 +88,7 @@ async function getSpeciesLanguage(speciesUrl, pokeUrl) {
     let dataset = await fetch(speciesUrl); // Das sind jetzt die Daten der Species
     let json = await dataset.json();
     let nameArray = json['names'];
-    for (let i = 0; i < nameArray.length; i++) {
+    for (let i = 0; i &lt; nameArray.length; i++) {
         let el = nameArray[i]['language']['name'];
         switch(el) {
         case 'en':
@@ -112,7 +140,7 @@ async function startSearch() {
     resultArray = [];  // Falls bereits ein Suchergebnis vorhanden ist, dieses löschen
     curCardSet = [];  // Wird benötigt zum Blättern durch die Suchergebnisse
     let searchValue = document.getElementById('search').value;
-    for (let i = 0; i < searchArray.length; i++) {
+    for (let i = 0; i &lt; searchArray.length; i++) {
         let element = searchArray[i];
         let splitted = element.split('~~~'); // [0] enthält den Namen, [1] die URL zur Karte
         if(splitted[0].toLowerCase().includes(searchValue.toLowerCase())) {
@@ -121,7 +149,7 @@ async function startSearch() {
     }
     // Die gefundenen Karten rendern
     document.getElementById('pokedex').innerHTML = '';
-    for (let j = 0; j < resultArray.length; j++) {
+    for (let j = 0; j &lt; resultArray.length; j++) {
         let url = resultArray[j][1];
         await loadPokemonByUrl(url);
     }
@@ -143,4 +171,26 @@ function resetSearch() {
     // Blättern-Buttons sichtbar schalten
     document.getElementById('btnPrevious').classList.remove('d-none');
     document.getElementById('btnNext').classList.remove('d-none')
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeLanguage">changeLanguage</a></li><li><a href="global.html#closeCard">closeCard</a></li><li><a href="global.html#getImgLink">getImgLink</a></li><li><a href="global.html#getLanguageName">getLanguageName</a></li><li><a href="global.html#getPokemonData">getPokemonData</a></li><li><a href="global.html#getSpeciesLanguage">getSpeciesLanguage</a></li><li><a href="global.html#getSpeciesName">getSpeciesName</a></li><li><a href="global.html#goToCard">goToCard</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadListOfPokemons">loadListOfPokemons</a></li><li><a href="global.html#loadPokemonByUrl">loadPokemonByUrl</a></li><li><a href="global.html#loadSearchData">loadSearchData</a></li><li><a href="global.html#nextPage">nextPage</a></li><li><a href="global.html#openCard">openCard</a></li><li><a href="global.html#openCardAddInformations">openCardAddInformations</a></li><li><a href="global.html#openCardAddStats">openCardAddStats</a></li><li><a href="global.html#openCardAddTypes">openCardAddTypes</a></li><li><a href="global.html#prevPage">prevPage</a></li><li><a href="global.html#renderSmallCard">renderSmallCard</a></li><li><a href="global.html#renderStats">renderStats</a></li><li><a href="global.html#resetSearch">resetSearch</a></li><li><a href="global.html#setSearchArray">setSearchArray</a></li><li><a href="global.html#showAbout">showAbout</a></li><li><a href="global.html#showHideNextPrevious">showHideNextPrevious</a></li><li><a href="global.html#showStats">showStats</a></li><li><a href="global.html#startNumber">startNumber</a></li><li><a href="global.html#startSearch">startSearch</a></li><li><a href="global.html#translation_de">translation_de</a></li><li><a href="global.html#translation_en">translation_en</a></li><li><a href="global.html#translation_es">translation_es</a></li><li><a href="global.html#translation_fr">translation_fr</a></li><li><a href="global.html#translation_it">translation_it</a></li><li><a href="global.html#translations">translations</a></li><li><a href="global.html#writeTypeData">writeTypeData</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 24 2023 13:34:59 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
