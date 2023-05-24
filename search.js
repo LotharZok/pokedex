@@ -110,30 +110,26 @@ function setSearchArray() {
  */
 async function startSearch() {
     resultArray = [];  // Falls bereits ein Suchergebnis vorhanden ist, dieses löschen
-    if (!document.getElementById('search').checkValidity()) {
-        alert(document.getElementById('search').validationMessage);
-    } else {
-        curCardSet = [];  // Wird benötigt zum Blättern durch die Suchergebnisse
-        let searchValue = document.getElementById('search').value;
-        for (let i = 0; i < searchArray.length; i++) {
-            let element = searchArray[i];
-            let splitted = element.split('~~~'); // [0] enthält den Namen, [1] die URL zur Karte
-            if(splitted[0].toLowerCase().includes(searchValue.toLowerCase())) {
-                resultArray.push(splitted);
-            }
+    curCardSet = [];  // Wird benötigt zum Blättern durch die Suchergebnisse
+    let searchValue = document.getElementById('search').value;
+    for (let i = 0; i < searchArray.length; i++) {
+        let element = searchArray[i];
+        let splitted = element.split('~~~'); // [0] enthält den Namen, [1] die URL zur Karte
+        if(splitted[0].toLowerCase().includes(searchValue.toLowerCase())) {
+            resultArray.push(splitted);
         }
-        // Die gefundenen Karten rendern
-        document.getElementById('pokedex').innerHTML = '';
-        for (let j = 0; j < resultArray.length; j++) {
-            let url = resultArray[j][1];
-            await loadPokemonByUrl(url);
-        }
-        // Button 'Suche schließen' sichtbar schalten
-        document.getElementById('closeSearch').style.display = 'block';
-        // Blättern-Buttons unsichtbar schalten
-        document.getElementById('btnPrevious').classList.add('d-none');
-        document.getElementById('btnNext').classList.add('d-none')
     }
+    // Die gefundenen Karten rendern
+    document.getElementById('pokedex').innerHTML = '';
+    for (let j = 0; j < resultArray.length; j++) {
+        let url = resultArray[j][1];
+        await loadPokemonByUrl(url);
+    }
+    // Button 'Suche schließen' sichtbar schalten
+    document.getElementById('closeSearch').style.display = 'block';
+    // Blättern-Buttons unsichtbar schalten
+    document.getElementById('btnPrevious').classList.add('d-none');
+    document.getElementById('btnNext').classList.add('d-none')
 }
 
 

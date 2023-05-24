@@ -23,9 +23,9 @@
     <header>
         <img src="img/logo.png" alt="" class="logo" onclick="loadListOfPokemons(startNumber)">
         <div>
-            <!-- <form onclick="startSearch()"> -->
+            <form onsubmit="startSearch(); return false;">
                 <input type="text" name="" id="search" placeholder="Suchbegriff eingeben" required minlength="3"> <button id="btnSearch" onclick="startSearch()">Suchen</button>
-            <!-- </form> -->
+            </form>
         </div>
         <div id="flags">
             <img src="img/de.png" alt="" onclick="changeLanguage('de')">
