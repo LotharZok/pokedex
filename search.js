@@ -10,6 +10,8 @@ let itSearchArray = [];
 let searchArray = [];
 let resultArray = [];
 
+let isSearching = false;
+
 
 /** 
  *  Startet das Laden der Suchdaten. Ruft hierzu Unterfunktionen auf.
@@ -119,6 +121,7 @@ async function startSearch() {
             resultArray.push(splitted);
         }
     }
+
     // Die gefundenen Karten rendern
     document.getElementById('pokedex').innerHTML = '';
     for (let j = 0; j < resultArray.length; j++) {
